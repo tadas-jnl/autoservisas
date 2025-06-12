@@ -21,7 +21,7 @@ class Service(models.Model):
     service_name = models.CharField(verbose_name="Paslaugos pavadinimas", max_length=200, help_text="Suteiktos paslaugos aprašymas")
     price = models.FloatField(verbose_name="Paslaugos kaina", max_length=10)
     def __str__(self):
-        return f"{self.service_name}: {self.price}"
+        return f"{self.service_name}: {self.price}€"
 
 class OrderData(models.Model):
     order_date = models.DateField(verbose_name="Užsakymo data", null=True, blank=True)

@@ -20,15 +20,13 @@ class AutoAdmin(admin.ModelAdmin):
     list_filter = ['client', 'automodel']
     search_fields = ['l_plate', 'vin_code']
 
-@admin.register(AutoModel)
+class ServiceAdmin(admin.ModelAdmin):
+    list_display = ['service_name', 'price']
+
 class AutoModelAdmin(admin.ModelAdmin):
     form = AutoModelForm
     list_display = ['make', 'model', 'year']
 
-class ServiceAdmin(admin.ModelAdmin):
-    list_display = ['service_name', 'price']
-
-admin.site.unregister(AutoModel)
 admin.site.register(AutoModel, AutoModelAdmin)
 admin.site.register(Auto, AutoAdmin)
 admin.site.register(Service, ServiceAdmin)

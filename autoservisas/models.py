@@ -1,5 +1,4 @@
 from tkinter.constants import CASCADE
-
 from django.db import models
 
 # Create your models here.
@@ -26,11 +25,25 @@ class Service(models.Model):
 class OrderData(models.Model):
     order_date = models.DateField(verbose_name="Užsakymo data", null=True, blank=True)
     auto = models.ForeignKey(to="Auto", verbose_name="Automobilis", on_delete=models.SET_NULL, null=True, blank=True)
-    #not finishd
+
+    def suma(self):
+        total_suma = 0
+        for line in self.lines.all():
+            total_suma += line.kaina()
+        return total_suma
+
+    def __str__(self):
+        return f"Automobilio {self.auto} remonto užsakymas. Bendra suma: {self.suma():.2f}"
 
 class OrderLine(models.Model):
     service = models.ForeignKey(to="Service", verbose_name="Suteikta paslauga", on_delete=models.CASCADE)
-    order_data = models.ForeignKey(to="OrderData", verbose_name="Užsakymas", on_delete=models.CASCADE)
+    order_data = models.ForeignKey(to="OrderData", verbose_name="Užsakymas", on_delete=models.CASCADE, related_name="lines")
     qty = models.IntegerField(verbose_name="Kiekis", null=True, blank=True)
-    #not finishd
 
+    def kaina(self):
+        return self.service.price * self.qty
+
+    kaina.short_description = "Kaina"
+
+    def __str__(self):
+        return f"{self.service.service_name} - {self.qty} vnt, kaina: {self.kaina():.2f}"

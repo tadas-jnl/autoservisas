@@ -19,7 +19,6 @@ class AutoAdmin(admin.ModelAdmin):
     list_display = ['client', 'automodel', 'l_plate', 'vin_code']
     list_filter = ['client', 'automodel']
     search_fields = ['l_plate', 'vin_code']
-    form = AutoModelForm
 
 @admin.register(AutoModel)
 class AutoModelAdmin(admin.ModelAdmin):

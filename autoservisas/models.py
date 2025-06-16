@@ -4,13 +4,13 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 
 # Create your models here.
 class AutoModel(models.Model):
-    model = models.CharField(verbose_name="Markė", max_length=200, help_text="Automobilio modelis")
-    make = models.CharField(verbose_name="Markė", max_length=200, help_text="Modelis")
+    make = models.CharField(verbose_name="Gamintojas", max_length=200, help_text="Automobilio gamintojas")
+    model = models.CharField(verbose_name="Modelis", max_length=200, help_text="Automobilio modelis")
     year = models.IntegerField(verbose_name='Pagaminimo metai',
                                validators=[MinValueValidator(1900), MaxValueValidator(2026)],
                                default=None, null=True, blank=True)
     def __str__(self):
-        return f'{self.model} {self.make} {self.year}'
+        return f'{self.make} {self.model} ({self.year})'
     class Meta:
         verbose_name = "automobilio modelis"
         verbose_name_plural = "Automobilių modeliai"

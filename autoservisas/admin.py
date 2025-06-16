@@ -14,9 +14,16 @@ class OrderDataAdmin(admin.ModelAdmin):
 class OrderLineAdmin(admin.ModelAdmin):
     list_display = ['service', 'qty', 'kaina']
 
+class AutoAdmin(admin.ModelAdmin):
+    list_display = ['client', 'automodel', 'l_plate', 'vin_code']
+    list_filter = ['client', 'automodel']
+    search_fields = ['l_plate', 'vin_code']
+
+class ServiceAdmin(admin.ModelAdmin):
+    list_display = ['service_name', 'price']
 
 admin.site.register(AutoModel)
-admin.site.register(Auto)
-admin.site.register(Service)
+admin.site.register(Auto, AutoAdmin)
+admin.site.register(Service, ServiceAdmin)
 admin.site.register(OrderData, OrderDataAdmin)
 admin.site.register(OrderLine, OrderLineAdmin)

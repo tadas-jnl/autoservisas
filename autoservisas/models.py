@@ -5,6 +5,7 @@ from django.db import models
 class AutoModel(models.Model):
     model = models.CharField(verbose_name="Markė", max_length=200, help_text="Automobilio modelis")
     make = models.CharField(verbose_name="Markė", max_length=200, help_text="Modelis")
+    year = models.IntegerField(verbose_name='Pagaminimo metai', max_length=4, default=None, null=True, blank=True)
     def __str__(self):
         return f'{self.model} {self.make}'
     class Meta:

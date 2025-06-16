@@ -1,13 +1,16 @@
 from tkinter.constants import CASCADE
 from django.db import models
+from django.core.validators import MaxValueValidator, MinValueValidator
 
 # Create your models here.
 class AutoModel(models.Model):
     model = models.CharField(verbose_name="Markė", max_length=200, help_text="Automobilio modelis")
     make = models.CharField(verbose_name="Markė", max_length=200, help_text="Modelis")
-    year = models.IntegerField(verbose_name='Pagaminimo metai', max_length=4, default=None, null=True, blank=True)
+    year = models.IntegerField(verbose_name='Pagaminimo metai',
+                               validators=[MinValueValidator(1900), MaxValueValidator(2026)],
+                               default=None, null=True, blank=True)
     def __str__(self):
-        return f'{self.model} {self.make}'
+        return f'{self.model} {self.make} {self.year}'
     class Meta:
         verbose_name = "automobilio modelis"
         verbose_name_plural = "Automobilių modeliai"

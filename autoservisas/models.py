@@ -68,5 +68,5 @@ class OrderLine(models.Model):
         return f"{self.service.service_name} - {self.qty} vnt, kaina: {self.kaina():.2f}"
 
     class Meta:
-        verbose_name = "užsakymo eilutė"
-        verbose_name_plural = "užsakymo eilutės"
+        verbose_name = "užsakymo įrašas"
+        verbose_name_plural = "užsakymo įrašai"

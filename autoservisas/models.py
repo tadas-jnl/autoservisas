@@ -23,8 +23,6 @@ class Auto(models.Model):
         verbose_name = "automobilis"
         verbose_name_plural = "automobiliai"
 
-
-
 class Service(models.Model):
     service_name = models.CharField(verbose_name="Paslaugos pavadinimas", max_length=200, help_text="Suteiktos paslaugos aprašymas")
     price = models.FloatField(verbose_name="Paslaugos kaina", max_length=10)

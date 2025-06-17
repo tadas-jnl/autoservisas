@@ -9,16 +9,17 @@ class OrderLineInLine(admin.TabularInline):
     fields = ['service', 'qty']
 
 class OrderDataAdmin(admin.ModelAdmin):
-    list_display = ['order_date', 'auto', 'suma']
+    list_display = ['order_date', 'auto', 'suma', 'status']
+    readonly_fields = ['order_date', 'auto', 'suma']
     inlines = [OrderLineInLine]
 
 class OrderLineAdmin(admin.ModelAdmin):
-    list_display = ['service', 'qty', 'kaina']
+    list_display = ['service', 'service__price', 'qty', 'kaina']
 
 class AutoAdmin(admin.ModelAdmin):
     list_display = ['client', 'automodel', 'l_plate', 'vin_code']
     list_filter = ['client', 'automodel']
-    search_fields = ['l_plate', 'vin_code']
+    search_fields = ['l_plate', 'vin_code', 'automodel__make']
 
 class ServiceAdmin(admin.ModelAdmin):
     list_display = ['service_name', 'price']

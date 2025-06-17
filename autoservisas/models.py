@@ -40,6 +40,16 @@ class OrderData(models.Model):
     order_date = models.DateField(verbose_name="Užsakymo data", null=True, blank=True)
     auto = models.ForeignKey(to="Auto", verbose_name="Automobilis", on_delete=models.SET_NULL, null=True, blank=True)
 
+    ORDER_STATUS = (
+        ('l', 'Laukiama'),
+        ('v', 'Vykdoma'),
+        ('n', 'Neapmokėta'),
+        ('a', 'Apmokėta'),
+        ('x', 'Atšaukta'),
+    )
+
+    status = models.CharField(verbose_name='Būsena', max_length=1, choices=ORDER_STATUS, blank=True, default='l')
+
     def suma(self):
         total_suma = 0
         for line in self.lines.all():

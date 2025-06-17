@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block "title" %} Index {% endblock %}
+
+{% block "content" %}
+<h2> need to fix something? </h2>
+<p> Mokam atlikti net {{ services_count }} skirtungų remonto darbų !</p>
+<p> Viso servise remontuota: {{ cars_count }} automobilių </p>
+<p> Atliktų ir apmokėtų darbų jau net <span class="fw-bold text-success"> {{ paid_orders }} </span> !!! </p>
+{% endblock %}

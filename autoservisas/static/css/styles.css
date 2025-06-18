@@ -1,9 +1,15 @@
 h1 {
   text-shadow: 0 0 3px var(--bs-primary), 0 0 5px white;
 }
+
+.my-broken-shadow {
+    text-shadow: 0 0 3px currentColor, 0 0 5px white;
+}
+
 a.nav-link:hover {
   text-shadow: 0 0 10px currentColor;
 }
+
 .carousel-inner {
   margin: 0 auto;
 }
@@ -20,7 +26,6 @@ ion-icon {
   font-size: 2em;
   animation: blink 2s ease-in infinite;
 }
-
 
 @keyframes blink {
   from, to { opacity: 1 }

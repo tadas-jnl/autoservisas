@@ -3,8 +3,8 @@
 {% block "title" %} Index {% endblock %}
 
 {% block "content" %}
-<h2> need to fix something? </h2>
-<p> Mokam atlikti net {{ services_count }} skirtungų remonto darbų !</p>
-<p> Viso servise remontuota: {{ cars_count }} automobilių </p>
+<h2 class="fs-4, pb-3"> Ką nors sutvarkyt? Už <span class="text-success my-shadow"><i class="bi bi-cash-coin"></i> pinigėlį</span> visada padėsim! </h2>
+<p> Mokam atlikti net <span class="text-info">{{ services_count }}</span> skirtungų remonto darbų !</p>
+<p> Viso servise remontuota: <span class="text-info">{{ cars_count }}</span> automobilių! </p>
 <p> Atliktų ir apmokėtų darbų jau net <span class="fw-bold text-success"> {{ paid_orders }} </span> !!! </p>
 {% endblock %}

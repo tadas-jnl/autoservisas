@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block "title" %} Automobilio informacija {% endblock %}
+
+{% block "content" %}
+  <h3 class="text-primary pb-3">Informacija apie automobilį</h3>
+  <p>Klientas :<strong class="ms-3"> {{ car.client }} </strong></p>
+  <p>Automobilio modelis :<strong class="ms-3">{{ car.automodel }} </strong> </p>
+  <p>Valstybinis numeris :<strong class="ms-3">{{ car.l_plate }} </strong> </p>
+  <p>Kėbulo numeris :<strong class="ms-3">{{ car.vin_code }} </strong> </p>
+  <h5 class="p-3">Remonto darbai:</h5>
+{% endblock %}

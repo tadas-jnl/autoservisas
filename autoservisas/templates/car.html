@@ -8,7 +8,7 @@
   <p class="text-secondary">Automobilio modelis :<strong class="ms-3 text-white">{{ car.automodel }} </strong> </p>
   <p class="text-secondary">Valstybinis numeris :<strong class="ms-3 text-white">{{ car.l_plate }} </strong> </p>
   <p class="text-secondary">Kėbulo numeris :<strong class="ms-3 text-white">{{ car.vin_code }} </strong> </p>
-  <h5 class="text-primary p-3 ms-3">Atlikti remonto darbai:</h5>
+  <h5 class="text-primary p-3"><i class="bi bi-file-earmark-spreadsheet-fill"></i>  Atlikti remonto darbai</h5>
 
     {% for order in car.orders.all %}
       {% for line in order.lines.all %}

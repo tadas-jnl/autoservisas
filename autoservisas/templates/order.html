@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block "title" %} Užsakymas {% endblock %}
+
+{% block "content" %}
+
+<h3 class="text-primary pb-3">Užsakymas <span class="text-white"> id: {{ order.pk }}</span></h3>
+<p class="text-secondary">Klientas: <span class="text-white"> {{ order.auto.client }} </span></p>
+<p class="text-secondary">Automobilis <span class="text-white"> {{ order.auto.automodel }} </span></p>
+<p class="text-secondary">Valst. Nr.:  <span class="text-white"> [{{ order.auto.l_plate }}] </span> VIN: <span class="text-white"> {{ order.auto.vin_code }} </span></p>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Paslauga</th>
+      <th scope="col">Kaina/vnt</th>
+      <th scope="col">Kiekis</th>
+      <th scope="col">Kaina</th>
+    </tr>
+  </thead>
+  <tbody>
+{% for line in order.lines.all %}
+    <tr>
+      <td>{{ forloop.counter }}</td>
+      <td>{{ line.service.service_name }}</td>
+      <td>{{ line.service.price }} €</td>
+      <td>{{ line.qty }}</td>
+      <td>{{ line.kaina }} €</td>
+    </tr>
+{% endfor %}
+      <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td><strong>Viso: </strong></td>
+      <td><strong>{{ order.suma }}</strong> €</td>
+    </tr>
+  </tbody>
+</table>
+
+{% endblock %}

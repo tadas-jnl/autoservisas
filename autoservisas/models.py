@@ -38,7 +38,7 @@ class Service(models.Model):
 
 class OrderData(models.Model):
     order_date = models.DateField(verbose_name="Užsakymo data", null=True, blank=True)
-    auto = models.ForeignKey(to="Auto", verbose_name="Automobilis", on_delete=models.SET_NULL, null=True, blank=True)
+    auto = models.ForeignKey(to="Auto", verbose_name="Automobilis", on_delete=models.SET_NULL, null=True, blank=True, related_name='orders')
 
     ORDER_STATUS = (
         ('l', 'Laukiama'),

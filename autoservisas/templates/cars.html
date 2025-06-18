@@ -3,7 +3,7 @@
 {% block "title" %} Servise registruoti automobiliai {% endblock %}
 
 {% block "content" %}
-<h3 class="pb-3 text-primary"> Servise registruoti automobiliai: </h3>
+<h3 class="pb-3 text-primary"> Servise registruoti automobiliai </h3>
   {% for car in automobiliai %}
     <a href="{% url 'automobilis' car.id %}" class="nav-link">
       <p> <strong class="text-white"> {{ car.client }} </strong> - {{ car.automodel }}</p>

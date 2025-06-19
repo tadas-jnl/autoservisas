@@ -20,6 +20,7 @@ class Auto(models.Model):
     vin_code = models.CharField(verbose_name="VIN numeris", max_length=17, help_text="Automobilio kėbulo numeris")
     client = models.CharField(verbose_name="Klientas", max_length=100)
     automodel = models.ForeignKey(to="AutoModel", verbose_name="Automobilio modelis", on_delete=models.SET_NULL, null=True, blank=True)
+    cover = models.ImageField(upload_to='covers', null=True, blank=True)
     def __str__(self):
         return f"{self.client} - ({self.l_plate}) {self.automodel}"
 

@@ -1,17 +1,17 @@
 {% extends "base.html" %}
 
-{% block "title" %} Informacija apie automobilį {% endblock %}
+{% block title %} Informacija apie automobilį {% endblock %}
 
-{% block "content" %}
+{% block content %}
 <div class="container">
   <div class="row">
     <div class="col-md-6">
       <div class="box">
         <h3 class="text-primary pb-3 ms-3">Informacija apie automobilį</h3>
-        <p class="text-secondary">Klientas :<span class="ms-3 text-white"> {{ car.client }} </span></p>
         <p class="text-secondary">Automobilio modelis :<strong class="ms-3 text-white">{{ car.automodel }} </strong> </p>
         <p class="text-secondary">Valstybinis numeris :<strong class="ms-3 text-white">{{ car.l_plate }} </strong> </p>
         <p class="text-secondary">Kėbulo numeris :<strong class="ms-3 text-white">{{ car.vin_code }} </strong> </p>
+        <p> <strong class="text-secondary">Aprašymas: </strong>{{ car.description | safe }}</p>
       </div>
     </div>
 

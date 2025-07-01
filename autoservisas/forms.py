@@ -1,5 +1,15 @@
 from django import forms
-from .models import AutoModel
+from .models import AutoModel, Comment, Profile, OrderData, Auto, OrderLine
+from django.contrib.auth.models import User
+
+OrderLineFormSet = forms.inlineformset_factory(
+    parent_model=OrderData,
+    model=OrderLine,
+    fields=['service', 'qty'],
+    min_num=1,
+    validate_min=True,
+    can_delete=False,
+    extra=4)
 
 class AutoModelForm(forms.ModelForm):
     YEAR_CHOICES = [(year, year) for year in range(2025, 1900, -1)]
@@ -13,3 +23,58 @@ class AutoModelForm(forms.ModelForm):
     class Meta:
         model = AutoModel
         fields = '__all__'
+
+class OrderCommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ['content']
+
+class UserUpdateForm(forms.ModelForm):
+    email = forms.EmailField(required=True, label='El. paštas',
+                             widget=forms.EmailInput(attrs={'type': 'email'}))
+
+    class Meta:
+        model = User
+        fields = ['email', 'first_name', 'last_name']
+
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        if User.objects.filter(email=email).exclude(pk=self.instance.pk).exists():
+            raise forms.ValidationError(f"{email} is taken.")
+        return email
+
+class ProfileUpdateForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = ['photo']
+
+class CreateOrderForm(forms.ModelForm):
+    class Meta:
+        model = OrderData
+        fields =['auto']
+        exclude = ['owner']
+
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user')  # 👈 pull user from kwargs
+        super().__init__(*args, **kwargs)
+        self.fields['auto'].queryset = Auto.objects.filter(owner=user)
+
+class ManageOrderForm(forms.ModelForm):
+    status = forms.ChoiceField(
+        choices=OrderData.ORDER_STATUS,
+        label='Būsena',
+        widget=forms.Select(attrs={'class': 'form-select'})
+    )
+    deadline_date = forms.DateField(
+        widget=forms.DateInput(attrs={'type': 'date'}), label='Termino data',)
+    deadline_time = forms.TimeField(
+        widget=forms.TimeInput(attrs={'type': 'time'}), label='Termino laikas')
+    
+    class Meta:
+        model = OrderData
+        fields = ['status', 'deadline_date', 'deadline_time']
+
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user')  # 👈 pull user from kwargs
+        super().__init__(*args, **kwargs)
+        

@@ -1,11 +1,16 @@
 {% extends "base.html" %}
 
-{% block "title" %} Užsakymas {% endblock %}
+{% block title %} Užsakymas {% endblock %}
+{% load crispy_forms_tags %}
+{% block content %}
 
-{% block "content" %}
+{% if user.profile.is_employee %}
+  <a href="{% url 'manage_order' order.pk %}" class="btn btn-primary my-4">Tvarkyti užsakymą</a>
+{% endif %}
 
+<br>
 <h3 class="text-primary pb-3 ms-3">Užsakymas <span class="text-white"> id: {{ order.pk }}</span></h3>
-<p class="text-secondary">Klientas: <span class="text-white"> {{ order.auto.client }} </span></p>
+<p class="text-secondary">Klientas: <span class="text-white"> {{ order.auto.owner }} </span></p>
 <p class="text-secondary">Užsakymo data: <span class="text-white"> {{ order.order_date }} </span></p>
 <p class="text-secondary">Automobilis <span class="text-white"> {{ order.auto.automodel }} </span></p>
 <p class="text-secondary">Valst. Nr.:  <span class="text-white"> [{{ order.auto.l_plate }}] </span> VIN: <span class="text-white"> {{ order.auto.vin_code }} </span></p>
@@ -39,5 +44,27 @@
     </tr>
   </tbody>
 </table>
+
+<div class="container mt-5">
+    <h3>Komentarai</h3>
+    {% if user.is_authenticated %}
+    <div class="fieldWrapper mb-5">
+        <hr class="w-25"><br/>
+        <h5>Palikite komentarą</h5>
+        <form action="" method="post">
+            {% csrf_token %}
+            {{ form|crispy }}<br/>
+            <input type="submit" class="btn btn-primary" value="Komentuoti">
+        </form>
+    </div>
+    {% endif %}
+    <hr>
+    {% for comment in order.comments.all %}
+    <p><img src="{{ comment.author.profile.photo.url }}" class="rounded-circle" style="width: 50px" class="mx-2"><strong> {{ comment.author }}</strong> ({{ comment.author.first_name}} {{comment.author.last_name }}) </p>
+    <small>{{ comment.date }}</small>
+    <p>{{ comment.content }}</p>
+    <hr>
+    {% endfor %}
+</div>
 
 {% endblock %}

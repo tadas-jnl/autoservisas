@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block title %} Mano užsakymai {% endblock %}
+
+{% block content %}
+
+
+<a href="{% url 'add_order' %}" class="btn btn-outline-primary my-4">Naujas užsakymas</a>
+<h3>Esami {{ user.username}} užsakymai</h3>
+  {% for order in my_orders %}
+<a href="{% url 'order' order.pk %}">
+<p>{{ order.order_date }} - {{ order.auto.automodel }} 
+  [[ Būsena: <strong class="{% if order.status == 'l' %}text-secondary{% elif order.status == 'v' %}text-info{% elif order.status == 'n' %}text-warning{% elif order.status == 'i' %}text-success{% elif order.status == 'x' %}text-danger{% endif %}">  {{order.get_status_display}} </strong>]]
+  Viso: {{ order.suma }} EUR </p>
+</a>
+{% endfor %}
+
+{% endblock %}

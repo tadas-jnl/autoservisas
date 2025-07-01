@@ -1,8 +1,8 @@
 {% extends "base.html" %}
 
-{% block "title" %} Paieška {% endblock %}
+{% block title %} Paieška {% endblock %}
 
-{% block "content" %}
+{% block content %}
 
 <h3 class="text-primary">Paieškos rezultatai pagal užklausą "<span class="text-white">{{ query }}</span>":</h3>
 <br>
@@ -10,5 +10,6 @@
 {%for car in cars %}
     <p><a href="{% url 'automobilis' car.pk %}" class="nav-link">{{ car }} / VIN: {{ car.vin_code }}</a></p>
 {% endfor %}
+
 
 {% endblock %}

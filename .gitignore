@@ -1,3 +1,4 @@
 *.pyc
 __pychache__/
 test.html
+.DS_Store

@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block title %} Užsakymas {% endblock %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+{% if user.profile.is_employee %}
+  <form class="container justify-content-center my-4" method="post">
+    <div class="form-group">
+      <h2>Tvarkyti užsakymą</h2>
+    {% csrf_token %}
+    {{ form|crispy }}
+    </div>
+    <div class="form-control">
+        <button type="submit" class="btn btn-primary my-3">Tvarkyti užsakymą</button>
+    </div>
+
+    
+  </form>
+{% endif %}
+{% endblock %}

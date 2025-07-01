@@ -1,8 +1,8 @@
 {% extends "base.html" %}
 
-{% block "title" %} Užsakymai {% endblock %}
+{% block title %} Užsakymai {% endblock %}
 
-{% block "content" %}
+{% block content %}
 <h3 class="pb-3 ms-3 text-primary">Užsakymų sąrašas</h3>
 <table class="table">
   <thead>
@@ -11,18 +11,19 @@
       <th scope="col">Klientas</th>
       <th scope="col">Automobilis</th>
       <th scope="col">Užsakymo būsena</th>
+      <th scope="col-1">Terminas</th>
     </tr>
   </thead>
   <tbody>
 {% for order in orders %}
-<!--  <a href="{{ order.pk }}" class="nav-link text-white">-->
     <tr>
       <td> <a href="{{ order.pk }}" class="nav-link text-info"> {{ order.pk }} <i class="bi bi-file-earmark-spreadsheet-fill"></i> </a> </td>
-      <td>{{ order.auto.client }}</td>
+      <td>{{ order.auto.owner }}</td>
       <td>{{ order.auto.automodel }}</td>
-      <td class="{% if order.status == 'l' %}text-secondary{% elif order.status == 'v' %}text-info{% elif order.status == 'n' %}text-warning{% elif order.status == 'a' %}text-success{% elif order.status == 'x' %}text-danger{% endif %}">{{ order.get_status_display}}</td>
+      <td class="{% if order.status == 'l' %}text-secondary{% elif order.status == 'v' %}text-info{% elif order.status == 'n' %}text-warning{% elif order.status == 'i' %}text-success{% elif order.status == 'x' %}text-danger{% endif %}">{{ order.get_status_display}}</td>
+      <td class="{% if order.is_overdue %}text-danger{% endif %}">{{ order.deadline_time }} - {{ order.deadline_date }}</td>
     </tr>
-<!--  </a>-->
+
 {% endfor %}
   </tbody>
 </table>

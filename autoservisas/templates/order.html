@@ -24,7 +24,7 @@
       <form method="post">
         {% csrf_token %}
         <div class="modal-header">
-          <h5 class="modal-title" id="addOrderLineLabel">Pridėti prekę</h5>
+          <h5 class="modal-title" id="addOrderLineLabel">Pridėti paslaugą</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Uždaryti"></button>
         </div>
         <div class="modal-body">
@@ -40,7 +40,7 @@
   </div>
 </div>
 
-<button type="button" class="btn btn-outline-info my-3" data-bs-toggle="modal" data-bs-target="#addOrderLineModal">
+<button type="button" class="btn btn-outline-primary my-3" data-bs-toggle="modal" data-bs-target="#addOrderLineModal">
   Pridėti paslaugą
 </button>
 {% endif %}

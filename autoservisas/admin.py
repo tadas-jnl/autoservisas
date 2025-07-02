@@ -10,13 +10,13 @@ class OrderLineInLine(admin.TabularInline):
     fields = ['service', 'qty']
 
 class OrderDataAdmin(admin.ModelAdmin):
-    list_display = ['auto', 'suma', 'status', 'deadline_date', 'deadline_time', 'is_overdue']
-    list_editable = ['deadline_date', 'deadline_time', 'status']
+    list_display = ['auto', 'suma', 'status', 'deadline', 'is_overdue']
+    list_editable = ['deadline', 'status']
     readonly_fields = ['order_date', 'suma']
     inlines = [OrderLineInLine]
 
 class OrderLineAdmin(admin.ModelAdmin):
-    list_display = ['service', 'service__price', 'qty', 'kaina']
+    list_display = ['service', 'service_price', 'qty', 'kaina']
 
 class AutoAdmin(admin.ModelAdmin):
     list_display = ['automodel', 'owner', 'l_plate', 'vin_code', 'cover']

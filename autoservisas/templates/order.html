@@ -6,6 +6,7 @@
 
 {% if user.profile.is_employee %}
   <a href="{% url 'manage_order' order.pk %}" class="btn btn-primary my-4">Tvarkyti užsakymą</a>
+  <a class="btn btn-danger" href="{% url 'delete_order' order.pk %}">Ištrinti užsakymą</a>
 {% endif %}
 
 <br>

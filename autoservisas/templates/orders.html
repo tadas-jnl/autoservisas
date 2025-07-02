@@ -21,7 +21,7 @@
       <td>{{ order.auto.owner }}</td>
       <td>{{ order.auto.automodel }}</td>
       <td class="{% if order.status == 'l' %}text-secondary{% elif order.status == 'v' %}text-info{% elif order.status == 'n' %}text-warning{% elif order.status == 'i' %}text-success{% elif order.status == 'x' %}text-danger{% endif %}">{{ order.get_status_display}}</td>
-      <td class="{% if order.is_overdue %}text-danger{% endif %}">{{ order.deadline_time }} - {{ order.deadline_date }}</td>
+      <td class="{% if order.is_overdue %}text-danger{% endif %}">{{ order.deadline }}</td>
     </tr>
 
 {% endfor %}

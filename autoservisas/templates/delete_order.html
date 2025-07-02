@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block title %}DELETE {% endblock %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="content-section">
+    <form method="POST">
+        {% csrf_token %}
+
+        <fieldset class="form-group">
+            <legend class="border-bottom mb-4">Ištrinti užsakymą {{ order }}</legend>
+        </fieldset>
+        <div class="form-group">
+            <button class="btn btn-danger" type="submit">IŠTRINTI</button>
+            <a class="btn btn-outline-info" fref="{% url 'orders' %}">Atšaukti</a>
+        </div>
+    </form>
+</div>
+
+
+{% endblock %}

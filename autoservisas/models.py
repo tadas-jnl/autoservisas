@@ -47,8 +47,7 @@ class Service(models.Model):
 
 class OrderData(models.Model):
     order_date = models.DateField(verbose_name="Užsakymo data", default=date.today, null=True, blank=True)
-    deadline_date = models.DateField(verbose_name="Remonto terminas (data)", null=True, blank=True)
-    deadline_time = models.TimeField(verbose_name="Remonto terminals (laikas)", null=True, blank=True)
+    deadline = models.DateTimeField(verbose_name="Deadline", null=True, blank=True)
     auto = models.ForeignKey(to="Auto", verbose_name="Automobilis", on_delete=models.CASCADE, related_name='orders')
 
 
@@ -63,13 +62,14 @@ class OrderData(models.Model):
     status = models.CharField(verbose_name='Būsena', max_length=1, choices=ORDER_STATUS, blank=True, default='l')
 
     def is_overdue(self):
-        # if self.status == 'i':
-        #     return False
-        if self.deadline_date and self.deadline_time and self.status == 'v':
-            deadline = datetime.combine(self.deadline_date, self.deadline_time)
-            deadline = timezone.make_aware(deadline, timezone.get_current_timezone())
-            return timezone.now() > deadline
-        return False 
+        match self.status:
+            case 'v':
+                if self.deadline and timezone.now() > self.deadline:
+                    return True
+                else: return False
+            case 'i':
+                return False
+            case _: pass
 
 
     def suma(self):
@@ -91,6 +91,9 @@ class OrderLine(models.Model):
     service = models.ForeignKey(to="Service", verbose_name="Suteikta paslauga", on_delete=models.CASCADE)
     order_data = models.ForeignKey(to="OrderData", verbose_name="Užsakymas", on_delete=models.CASCADE, related_name="lines")
     qty = models.IntegerField(verbose_name="Kiekis", default=1, null=True, blank=True)
+
+    def service_price(self):
+        return self.service.price
 
     def kaina(self):
         return self.service.price * self.qty

@@ -11,8 +11,8 @@ from django.conf import settings
 from django.core.paginator import Paginator
 from django.db.models import Q
 from .models import Auto, OrderData, Service
-from .forms import OrderCommentForm, UserUpdateForm, ProfileUpdateForm, CreateOrderForm, ManageOrderForm, OrderLineFormSet
-
+from .forms import (OrderCommentForm, UserUpdateForm, ProfileUpdateForm, 
+                    CreateOrderForm, ManageOrderForm, OrderLineFormSet)
 
 # Create your views here.
 def index(request):
@@ -152,24 +152,6 @@ class AddOrder(LoginRequiredMixin, generic.View):
 
         return render(request, 'add_order.html', {'form': form, 'formset': formset})
 
-# class AddOrder(LoginRequiredMixin, generic.CreateView):
-    # model = OrderData
-    # form_class = CreateOrderForm
-    # template_name = "add_order.html"
-
-    # def get_success_url(self):
-    #     return reverse('my_orders')
-
-    # def form_valid(self, form):
-    #     form.instance.customer = self.request.user
-    #     messages.success(self.request, "Užsakymas sukurtas")
-    #     return super().form_valid(form)
-
-    # def get_form_kwargs(self):
-    #     kwargs = super().get_form_kwargs()
-    #     kwargs['user'] = self.request.user  # 👈 inject user into form
-    #     return kwargs
-
 class ManageOrder(LoginRequiredMixin, UserPassesTestMixin, generic.UpdateView):
     model = OrderData
     form_class = ManageOrderForm
@@ -190,6 +172,15 @@ class ManageOrder(LoginRequiredMixin, UserPassesTestMixin, generic.UpdateView):
         kwargs['user'] = self.request.user
         return kwargs
 
+class DeleteOrder(LoginRequiredMixin, UserPassesTestMixin, generic.DeleteView):
+    model = OrderData
+    context_object_name = "order"
+    template_name = "delete_order.html"
+    success_url = "/autoservisas/orders"
+
+    def test_func(self):
+        return self.request.user.profile.is_employee
+    
 
 @login_required
 def profile(request):
@@ -213,3 +204,20 @@ def profile(request):
     }
     return render(request, 'profile.html', context=context)
 
+# class AddOrder(LoginRequiredMixin, generic.CreateView):
+    # model = OrderData
+    # form_class = CreateOrderForm
+    # template_name = "add_order.html"
+
+    # def get_success_url(self):
+    #     return reverse('my_orders')
+
+    # def form_valid(self, form):
+    #     form.instance.customer = self.request.user
+    #     messages.success(self.request, "Užsakymas sukurtas")
+    #     return super().form_valid(form)
+
+    # def get_form_kwargs(self):
+    #     kwargs = super().get_form_kwargs()
+    #     kwargs['user'] = self.request.user  # 👈 inject user into form
+    #     return kwargs

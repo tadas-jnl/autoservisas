@@ -1,6 +1,8 @@
 from django import forms
 from .models import AutoModel, Comment, Profile, OrderData, Auto, OrderLine
 from django.contrib.auth.models import User
+from bootstrap_datepicker_plus.widgets import DateTimePickerInput
+
 
 OrderLineFormSet = forms.inlineformset_factory(
     parent_model=OrderData,
@@ -65,14 +67,28 @@ class ManageOrderForm(forms.ModelForm):
         label='Būsena',
         widget=forms.Select(attrs={'class': 'form-select'})
     )
-    deadline_date = forms.DateField(
-        widget=forms.DateInput(attrs={'type': 'date'}), label='Termino data',)
-    deadline_time = forms.TimeField(
-        widget=forms.TimeInput(attrs={'type': 'time'}), label='Termino laikas')
+    # deadline_date = forms.DateField(
+    #     widget=forms.DateInput(attrs={'type': 'date'}), label='Termino data',)
+    # deadline_time = forms.TimeField(
+    #     widget=forms.TimeInput(attrs={'type': 'time'}), label='Termino laikas')
     
     class Meta:
         model = OrderData
-        fields = ['status', 'deadline_date', 'deadline_time']
+        fields = ['status', 'deadline']
+
+        widgets = {
+            'deadline': DateTimePickerInput(
+                options={
+                    "format": "YYYY-MM-DD HH:mm",
+                    "stepping": 15,  # ⏰ optional: sets time interval (15 mins)
+                    "useCurrent": True,
+                    "showClose": True,
+                    "showClear": True,
+                    "showTodayButton": True,
+                    "sideBySide": True  # ✅ shows date & time picker next to each other
+                }
+            )
+        }
 
     def __init__(self, *args, **kwargs):
         user = kwargs.pop('user')  # 👈 pull user from kwargs

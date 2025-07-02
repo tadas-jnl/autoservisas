@@ -4,15 +4,6 @@ from django.contrib.auth.models import User
 from bootstrap_datepicker_plus.widgets import DateTimePickerInput
 
 
-OrderLineFormSet = forms.inlineformset_factory(
-    parent_model=OrderData,
-    model=OrderLine,
-    fields=['service', 'qty'],
-    min_num=1,
-    validate_min=True,
-    can_delete=False,
-    extra=4)
-
 class AutoModelForm(forms.ModelForm):
     YEAR_CHOICES = [(year, year) for year in range(2025, 1900, -1)]
     #(year, year) nes ChoiceField reikalauja tuple (value, label)
@@ -51,13 +42,14 @@ class ProfileUpdateForm(forms.ModelForm):
         fields = ['photo']
 
 class CreateOrderForm(forms.ModelForm):
+
     class Meta:
         model = OrderData
         fields =['auto']
         exclude = ['owner']
 
     def __init__(self, *args, **kwargs):
-        user = kwargs.pop('user')  # 👈 pull user from kwargs
+        user = kwargs.pop('user')  # Pull user from kwargs
         super().__init__(*args, **kwargs)
         self.fields['auto'].queryset = Auto.objects.filter(owner=user)
 
@@ -67,11 +59,7 @@ class ManageOrderForm(forms.ModelForm):
         label='Būsena',
         widget=forms.Select(attrs={'class': 'form-select'})
     )
-    # deadline_date = forms.DateField(
-    #     widget=forms.DateInput(attrs={'type': 'date'}), label='Termino data',)
-    # deadline_time = forms.TimeField(
-    #     widget=forms.TimeInput(attrs={'type': 'time'}), label='Termino laikas')
-    
+
     class Meta:
         model = OrderData
         fields = ['status', 'deadline']
@@ -93,4 +81,14 @@ class ManageOrderForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         user = kwargs.pop('user')  # 👈 pull user from kwargs
         super().__init__(*args, **kwargs)
-        
+
+class CreateOrderLineForm(forms.ModelForm):
+    class Meta:
+        model = OrderLine
+        fields = ['order_data', 'service', 'qty']
+        widgets = {
+            'order_data': forms.HiddenInput()
+        }
+
+
+

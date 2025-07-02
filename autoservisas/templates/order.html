@@ -16,6 +16,35 @@
 <p class="text-secondary">Automobilis <span class="text-white"> {{ order.auto.automodel }} </span></p>
 <p class="text-secondary">Valst. Nr.:  <span class="text-white"> [{{ order.auto.l_plate }}] </span> VIN: <span class="text-white"> {{ order.auto.vin_code }} </span></p>
 
+{% if order.status != 'i' %}
+
+<div class="modal fade" id="addOrderLineModal" tabindex="-1" aria-labelledby="addOrderLineLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form method="post">
+        {% csrf_token %}
+        <div class="modal-header">
+          <h5 class="modal-title" id="addOrderLineLabel">Pridėti prekę</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Uždaryti"></button>
+        </div>
+        <div class="modal-body">
+          {{ orderline_form|crispy }}
+          <input type="hidden" name="submit_type" value="orderline">
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-success">Pridėti</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Atšaukti</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<button type="button" class="btn btn-outline-info my-3" data-bs-toggle="modal" data-bs-target="#addOrderLineModal">
+  Pridėti paslaugą
+</button>
+{% endif %}
+
 <table class="table">
   <thead>
     <tr>
@@ -55,7 +84,7 @@
         <form action="" method="post">
             {% csrf_token %}
             {{ form|crispy }}<br/>
-            <input type="submit" class="btn btn-primary" value="Komentuoti">
+            <input type="submit" name="submit_type" class="btn btn-primary" value="comment">
         </form>
     </div>
     {% endif %}

@@ -15,20 +15,9 @@
         <h3 class="py-2">Užsakymo duomenys</h3>
         <hr class="w-50 my-4">
     
-    {{ form|crispy }}
-        <br><br>
-        <h3 class="py-2">Paslaugos</h3>
+             {{ form|crispy }}
 
-        
-        {{ formset.management_form }}
-        {% for line_form in formset %}
-
-            {{ line_form.service }}
-            {{ line_form.qty }}
-            <br><br>
-        {% endfor %}
         <div class="form-group">
-
             <button class="btn btn-primary" type="submit">Užsakyti</button>
         </div>
     </div>

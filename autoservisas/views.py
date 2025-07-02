@@ -10,9 +10,8 @@ from django.views.decorators.csrf import csrf_protect
 from django.conf import settings
 from django.core.paginator import Paginator
 from django.db.models import Q
-from .models import Auto, OrderData, Service
-from .forms import (OrderCommentForm, UserUpdateForm, ProfileUpdateForm, 
-                    CreateOrderForm, ManageOrderForm, OrderLineFormSet)
+from .models import Auto, OrderData, Service, OrderLine
+from .forms import OrderCommentForm, UserUpdateForm, ProfileUpdateForm, CreateOrderForm, ManageOrderForm, CreateOrderLineForm
 
 # Create your views here.
 def index(request):
@@ -98,6 +97,14 @@ class OrderDetailView(LoginRequiredMixin, FormMixin, UserPassesTestMixin, generi
     context_object_name = 'order'
     form_class = OrderCommentForm
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['form'] = self.get_form()
+        context['orderline_form'] = CreateOrderLineForm(initial={
+            'order_data': self.object
+        })
+        return context
+
     def test_func(self):
         user = self.request.user
         order = self.get_object()
@@ -108,11 +115,21 @@ class OrderDetailView(LoginRequiredMixin, FormMixin, UserPassesTestMixin, generi
 
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
-        form = self.get_form()
-        if form.is_valid():
-            return self.form_valid(form)
-        else:
-            return self.form_invalid(form)
+        submit_type = request.POST.get("submit_type")
+
+        if submit_type == 'comment':
+            form = self.get_form()
+            if form.is_valid():
+                return self.form_valid(form)
+            else:
+                return self.form_invalid(form)
+        elif submit_type == "orderline":
+            orderline_form = CreateOrderLineForm(request.POST)
+            if orderline_form.is_valid():
+                line = orderline_form.save(commit=False)
+                line.order_data = self.object
+                line.save()
+        return redirect(self.get_success_url())
 
     def form_valid(self, form):
         form.instance.order = self.object
@@ -129,28 +146,24 @@ class MyOrdersList(LoginRequiredMixin, generic.ListView):
     def get_queryset(self):
         return OrderData.objects.filter(auto__owner=self.request.user)
 
-class AddOrder(LoginRequiredMixin, generic.View):
-    def get(self, request):
-        form = CreateOrderForm(user=request.user)
-        formset = OrderLineFormSet()
-        return render(request, 'add_order.html', {'form': form, 'formset': formset})
+class AddOrder(LoginRequiredMixin, generic.CreateView):
+    model = OrderData
+    form_class = CreateOrderForm
+    template_name = "add_order.html"
 
-    def post(self, request):
-        form = CreateOrderForm(request.POST, user=request.user)
-        formset = OrderLineFormSet(request.POST)
+    def get_success_url(self):
+        return reverse("order", kwargs={'pk': self.object.pk})
 
-        if form.is_valid() and formset.is_valid():
-            order = form.save(commit=False)
-            order.customer = request.user
-            order.save()
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user  # Inject user into form
+        return kwargs
 
-            formset.instance = order
-            formset.save()
+    def form_valid(self, form):
+        form.instance.auto.owner = self.request.user
+        messages.success(self.request, "Užsakymas sukurtas")
+        return super().form_valid(form)
 
-            messages.success(request, "Užsakymas sukurtas su paslaugomis")
-            return redirect('my_orders')
-
-        return render(request, 'add_order.html', {'form': form, 'formset': formset})
 
 class ManageOrder(LoginRequiredMixin, UserPassesTestMixin, generic.UpdateView):
     model = OrderData
@@ -204,20 +217,26 @@ def profile(request):
     }
     return render(request, 'profile.html', context=context)
 
-# class AddOrder(LoginRequiredMixin, generic.CreateView):
-    # model = OrderData
-    # form_class = CreateOrderForm
-    # template_name = "add_order.html"
 
-    # def get_success_url(self):
-    #     return reverse('my_orders')
-
-    # def form_valid(self, form):
-    #     form.instance.customer = self.request.user
-    #     messages.success(self.request, "Užsakymas sukurtas")
-    #     return super().form_valid(form)
-
-    # def get_form_kwargs(self):
-    #     kwargs = super().get_form_kwargs()
-    #     kwargs['user'] = self.request.user  # 👈 inject user into form
-    #     return kwargs
+# class AddOrder(LoginRequiredMixin, generic.View):
+#     def get(self, request):
+#         form = CreateOrderForm(user=request.user)
+#         formset = OrderLineFormSet()
+#         return render(request, 'add_order.html', {'form': form, 'formset': formset})
+#
+#     def post(self, request):
+#         form = CreateOrderForm(request.POST, user=request.user)
+#         formset = OrderLineFormSet(request.POST)
+#
+#         if form.is_valid() and formset.is_valid():
+#             order = form.save(commit=False)
+#             order.customer = request.user
+#             order.save()
+#
+#             formset.instance = order
+#             formset.save()
+#
+#             messages.success(request, "Užsakymas sukurtas su paslaugomis")
+#             return redirect('my_orders')
+#
+#         return render(request, 'add_order.html', {'form': form, 'formset': formset})
